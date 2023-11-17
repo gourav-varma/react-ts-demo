@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Box, Container, CircularProgress, TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { getAllUserdata } from "../services/DB";
-import UserType from "../components/types/UserType";
-import ButtonEle from "../components/Button";
+import UserType from "../component/types/UserType";
+import ButtonEle from "../component/Button";
 import { useNavigate } from "react-router-dom";
 
 const columns: GridColDef[] = [

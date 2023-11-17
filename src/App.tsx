@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-import { ViewData } from './pages/ViewData'
-import { HomePage } from './pages/HomePage'
-import { UploadData } from './pages/UploadData'
+import { ViewData } from './screens/ViewData'
+import { HomePage } from './screens/HomePage'
+import { UploadData } from './screens/UploadData'
 import { Outlet } from "react-router-dom";
 
 

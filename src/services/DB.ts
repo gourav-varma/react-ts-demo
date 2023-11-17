@@ -10,7 +10,7 @@ import {
   } from "firebase/firestore";
 // @ts-ignore
 import { db } from "../firebase-config";
-import UserType from "../components/types/UserType";
+import UserType from "../component/types/UserType";
 
 const userdataRef = collection(db, "userdata");
 const getAllUserdata = async () => {
