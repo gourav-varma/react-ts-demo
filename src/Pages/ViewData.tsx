@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Box, Container, CircularProgress, TextField } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { getAllUserdata } from "../Services/DB/Db";
-import UserType from "../Components/Type/UserType";
-import ButtonEle from "../Components/Button";
+import { getAllUserdata } from "../services/DB";
+import UserType from "../components/types/UserType";
+import ButtonEle from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
 const columns: GridColDef[] = [
@@ -112,7 +112,7 @@ function ViewData() {
             text={"Upload Excel Data"}
             onclick={() => {
               console.log("clicked view data");
-              navigate("/addDataExcel");
+              navigate("/uploadData");
             }}
           />
         </Box>

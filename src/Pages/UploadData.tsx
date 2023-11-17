@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Container, Snackbar, Alert, Button, Stack, Box, AlertColor } from '@mui/material';
+import { Container, Snackbar, Alert, Button, Stack, Box, AlertColor, SnackbarCloseReason } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { addAllUserData } from '../Services/DB/Db';
+import { addAllUserData } from '../services/DB';
 import * as XLSX from "xlsx";
-import ButtonEle from '../Components/Button';
-import UserType from '../Components/Type/UserType';
+import ButtonEle from '../components/Button';
+import UserType from '../components/types/UserType';
+import { snackbar } from '../components/SnackBar';
 
 const columns: GridColDef[] = [
 	{ field: 'id', headerName: 'ID', width: 100 },
@@ -14,27 +15,19 @@ const columns: GridColDef[] = [
 	{ field: 'mobile', headerName: 'Mobile', width: 130 },
 	{ field: 'email', headerName: 'Email', width: 200 },
 	{ field: 'address', headerName: 'Address', width: 200 },
-	// {
-	//   field: 'fullName',
-	//   headerName: 'Full name',
-	//   description: 'This column has a value getter and is not sortable.',
-	//   sortable: false,
-	//   width: 160,
-	//   valueGetter: (params: GridValueGetterParams) =>
-	//     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-	// },
 ];
 
-function AddDataExcel() {
+function UploadData() {
   const [data, setData] = useState<UserType[]>();
   const [previewData, setPreviewData] = useState<UserType[]>();
 
-  const [open, setOpen] = useState(false);
-  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorSnackBar, setErrorSnackBar] = useState(false);
+  const [successSnackBar, setSuccessSnackBar] = useState(false);
+  const [uploadingSnackBar, setUploadingSnackBar] = useState(false);
 
   const handleFileUpload = (e: any) => {
-    setData([]);
-    setPreviewData([]);
+    // setData([]);
+    // setPreviewData([]);
     const reader = new FileReader();
     let errorFlag = false;
     reader.readAsBinaryString(e.target.files[0]);
@@ -65,7 +58,7 @@ function AddDataExcel() {
         setPreviewData(parsedData.slice(0, 5) as UserType[]);
       }else {
         console.error('Invalid Excel Schema');
-        handleSnackBar(false);
+        setErrorSnackBar(true);
         setData([]);
         setPreviewData([]);
         errorFlag = true;
@@ -76,32 +69,24 @@ function AddDataExcel() {
     }
   }
 
-  const handleSnackBar = (success: boolean) => {
-    if(success){
-      setSuccessOpen(true);
-    }else {
-      setOpen(true);
-    }
-  };
-
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleErrorSnackBarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpen(false);
-    setSuccessOpen(false);
+    setErrorSnackBar(false);
   };
-
-  const snackbar = (severity: AlertColor, text: String, open: boolean) => {
-    return (
-      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{vertical:"top", horizontal: "right"}}> 
-        <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
-          {text}
-          {/* Error: Invalid Schema */}
-        </Alert>
-      </Snackbar>
-    )
-  }
+  const handleSuccessSnackBarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccessSnackBar(false);
+  };
+  const handleUploadingSnackBarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setUploadingSnackBar(false);
+  };
 
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
@@ -156,9 +141,11 @@ function AddDataExcel() {
             <Container disableGutters={true} sx={{height: '60%', width: '90%', my: '2rem'}}>
               <ButtonEle text={'Upload Data'} onclick={async () => {
                 if(data){
+                  setUploadingSnackBar(true);
                   const res = await addAllUserData(data);
+                  setUploadingSnackBar(false);
                   if(res){
-                    handleSnackBar(true);
+                    setSuccessSnackBar(true);
                   }
                 }
               }}/>
@@ -166,10 +153,13 @@ function AddDataExcel() {
         )}
       </div>
       {
-         (snackbar("error", "Error: Invalid Schema", open)) 
+         (snackbar("error", "Error: Invalid Schema", errorSnackBar, 3000, handleErrorSnackBarClose)) 
       }
       {
-         (snackbar("success", "Uploaded Data", successOpen)) 
+         (snackbar("success", "Uploaded Data", successSnackBar, 4000, handleSuccessSnackBarClose)) 
+      }
+      {
+         (snackbar("info", "Uploading Data", uploadingSnackBar, null, handleUploadingSnackBarClose))
       }
     </Stack>
   );
@@ -182,4 +172,4 @@ function validSchema(obj: any) {
   return false;
 }
 
-export {AddDataExcel};
+export {UploadData};
