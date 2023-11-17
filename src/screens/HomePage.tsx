@@ -1,10 +1,10 @@
 import { MouseEventHandler, useEffect, useState } from 'react';
 // import { createTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import ButtonEle from '../component/Button';
+import ButtonEle from '../components/Button';
 import { deleteUserdata } from '../services/DB';
 import { Container, Snackbar, Alert, Button, Stack, Box, AlertColor } from '@mui/material';
-import { snackbar } from '../component/SnackBar';
+import { snackbar } from '../components/SnackBar';
 
 function HomePage() {
   const navigate = useNavigate();

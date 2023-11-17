@@ -3,9 +3,9 @@ import { Container, Snackbar, Alert, Button, Stack, Box, AlertColor, SnackbarClo
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { addAllUserData } from '../services/DB';
 import * as XLSX from "xlsx";
-import ButtonEle from '../component/Button';
-import UserType from '../component/types/UserType';
-import { snackbar } from '../component/SnackBar';
+import ButtonEle from '../components/Button';
+import UserType from '../components/types/UserType';
+import { snackbar } from '../components/SnackBar';
 
 const columns: GridColDef[] = [
 	{ field: 'id', headerName: 'ID', width: 100 },
